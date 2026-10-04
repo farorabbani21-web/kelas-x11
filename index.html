@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f7f1">
+  <meta name="description" content="Ruang digital Kelas X-11 SMA — tempat berbagi kabar, jadwal, dan cerita kelas.">
+  <title>AREA KELAS X-11</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --ink: #202a24;
+      --muted: #748077;
+      --green: #315d43;
+      --green-deep: #234632;
+      --lime: #d8ed9a;
+      --paper: #f7f7f1;
+      --white: #fff;
+      --line: #e8e9df;
+      --orange: #e9825d;
+      --sky: #58b8e8;
+      --serif: Georgia, "Times New Roman", serif;
+      font-family: "DM Sans", sans-serif;
+      color: var(--ink);
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(rgba(49, 93, 67, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(49, 93, 67, .025) 1px, transparent 1px),
+        radial-gradient(ellipse at 12% 12%, rgba(216, 237, 154, .13), transparent 34%);
+      background-size: 32px 32px, 32px 32px, auto;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-width: 320px; background: transparent; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .wrap { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+
+    .topbar {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(32, 42, 36, .08);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: -.04em; }
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--green);
+      color: var(--lime);
+      font-family: var(--serif);
+      font-size: 21px;
+      font-style: italic;
+    }
+    .brand-name { color: #000; font-family: "Manrope", sans-serif; font-size: 15px; }
+    .nav-links { display: flex; align-items: center; gap: 31px; color: #5f6c62; font-size: 13px; font-weight: 600; }
+    .nav-links a:hover { color: var(--green); }
+    .nav-date { color: var(--muted); font-size: 12px; }
+    .menu-toggle { display: none; border: 0; padding: 8px; background: transparent; color: var(--ink); font-size: 24px; cursor: pointer; }
+
+    .hero { padding: 58px 0 42px; }
+    .hero-card {
+      min-height: 405px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      overflow: hidden;
+      border-radius: 24px;
+      background: var(--green);
+      color: var(--white);
+      position: relative;
+      isolation: isolate;
+    }
+    .hero-copy { padding: 60px 0 52px 62px; position: relative; z-index: 2; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--lime); font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; }
+    h1 { max-width: 590px; margin: 20px 0 16px; font-family: "Manrope", sans-serif; font-size: clamp(43px, 6vw, 68px); line-height: 1.04; letter-spacing: -.065em; }
+    h1 span { color: var(--lime); font-family: var(--serif); font-weight: 400; font-style: italic; letter-spacing: -.04em; }
+    .hero-copy > p { max-width: 410px; margin: 0; color: rgba(255,255,255,.75); font-size: 14px; line-height: 1.8; }
+    .hero-actions { display: flex; align-items: center; gap: 22px; margin-top: 30px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 0 18px; border-radius: 9px; background: var(--lime); color: var(--green-deep); font-size: 12px; font-weight: 700; transition: transform .2s, background .2s; }
+    .button:hover { background: #e4f6b5; transform: translateY(-2px); }
+    .text-link { display: inline-flex; align-items: center; gap: 8px; color: white; font-size: 12px; font-weight: 600; }
+    .text-link span { font-size: 17px; transition: transform .2s; }
+    .text-link:hover span { transform: translateX(4px); }
+    .hero-art { position: relative; min-height: 360px; }
+    .sun { width: 242px; height: 242px; position: absolute; top: 58px; right: 92px; border-radius: 50%; background: var(--lime); }
+    .sun::before { content: ""; position: absolute; inset: 20px; border: 1px solid rgba(49,93,67,.2); border-radius: inherit; }
+    .sun::after { content: ""; position: absolute; inset: 38px; border: 1px solid rgba(49,93,67,.18); border-radius: inherit; }
+    .orbit { position: absolute; width: 340px; height: 340px; top: 11px; right: 42px; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; }
+    .orbit { animation: study-orbit 28s linear infinite; }
+    .orbit::before { content: ""; position: absolute; width: 12px; height: 12px; left: 27px; top: 92px; border-radius: 50%; background: var(--orange); }
+    .orbit::after { content: ""; position: absolute; width: 8px; height: 8px; right: 39px; bottom: 41px; border-radius: 50%; background: #fff; }
+    .sun { animation: study-float 5s ease-in-out infinite; }
+    .art-note { position: absolute; right: 34px; bottom: 48px; width: 205px; padding: 17px; border: 1px solid rgba(255,255,255,.2); border-radius: 13px; background: rgba(255,255,255,.1); backdrop-filter: blur(8px); animation: study-float 4.4s ease-in-out -1.5s infinite; }
+    .study-doodle { position: absolute; z-index: 2; display: grid; place-items: center; filter: drop-shadow(0 8px 12px rgba(18, 43, 29, .16)); animation: doodle-drift 5s ease-in-out infinite; }
+    .study-doodle svg { display: block; width: 100%; height: 100%; }
+    .study-book { width: 105px; height: 82px; left: 11px; bottom: 38px; animation-delay: -.8s; }
+    .study-pencil { width: 42px; height: 86px; top: 35px; right: 57px; animation-delay: -2.2s; }
+    .study-star { width: 27px; height: 27px; top: 69px; left: 49px; color: var(--lime); animation-delay: -1.4s; }
+    .art-note small { display: block; margin-bottom: 8px; color: var(--lime); font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    .art-note strong { font-family: "Manrope", sans-serif; font-size: 15px; line-height: 1.45; }
+    .art-number { position: absolute; inset: 0; display: grid; place-items: center; color: var(--green); font-family: var(--serif); font-size: clamp(62px, 8vw, 104px); font-style: italic; letter-spacing: -.09em; }
+    .hero-decoration { position: absolute; z-index: -1; width: 300px; height: 300px; right: -120px; bottom: -177px; border: 1px solid rgba(255,255,255,.1); border-radius: 50%; }
+    @keyframes study-orbit { to { rotate: 360deg; } }
+    @keyframes study-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+    @keyframes doodle-drift { 0%, 100% { translate: 0 0; rotate: -4deg; } 50% { translate: 0 -9px; rotate: 4deg; } }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); margin-bottom: 63px; padding: 23px 0; border-bottom: 1px solid var(--line); }
+    .stat { padding-left: 25px; border-left: 1px solid var(--line); }
+    .stat:first-child { padding-left: 0; border-left: 0; }
+    .stat strong { display: block; font-family: "Manrope", sans-serif; font-size: 25px; letter-spacing: -.05em; }
+    .stat span { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
+    .advisor-card { display: flex; align-items: center; gap: 16px; margin: -37px auto 58px; padding: 17px 20px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.88); }
+    .advisor-icon { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border-radius: 12px; background: #e9f4fb; color: #2878a5; font-size: 20px; }
+    .advisor-label { display: block; margin-bottom: 4px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    .advisor-name { display: block; font-family: "Manrope", sans-serif; font-size: 14px; font-weight: 800; letter-spacing: -.02em; }
+
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+    .section-kicker { margin: 0 0 8px; color: #829080; font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    h2 { margin: 0; font-family: "Manrope", sans-serif; font-size: 29px; line-height: 1.2; letter-spacing: -.055em; }
+    .section-subtitle { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+    .schedule-section { padding-bottom: 68px; }
+    .day-picker { display: flex; gap: 6px; padding: 4px; border: 1px solid var(--line); border-radius: 10px; background: #f0f1e9; }
+    .day-picker button { min-width: 44px; border: 0; border-radius: 7px; padding: 8px 10px; background: transparent; color: var(--muted); font-size: 11px; font-weight: 700; cursor: pointer; }
+    .day-picker button[aria-pressed="true"] { background: var(--green); color: white; box-shadow: 0 2px 7px rgba(35,70,50,.18); }
+    .day-picker button { transition: background .2s, color .2s, transform .2s; }
+    .day-picker button:hover { transform: translateY(-2px); }
+    .table-shell { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--white); }
+    .schedule { width: 100%; border-collapse: collapse; text-align: left; }
+    .schedule th { padding: 15px 20px; border-bottom: 1px solid var(--line); color: #92998e; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .schedule td { padding: 17px 20px; border-bottom: 1px solid #eff0e9; font-size: 12px; }
+    .schedule tbody tr { transition: background-color .2s; }
+    .schedule tbody tr:hover { background: #f7f9f1; }
+    .schedule tr:last-child td { border-bottom: 0; }
+    .schedule td:first-child { color: #879087; font-variant-numeric: tabular-nums; }
+    .schedule tbody tr { animation: schedule-row-in .28s ease both; }
+    .schedule tbody tr:nth-child(2) { animation-delay: .035s; }
+    .schedule tbody tr:nth-child(3) { animation-delay: .07s; }
+    .schedule tbody tr:nth-child(4) { animation-delay: .105s; }
+    .schedule tbody tr:nth-child(5) { animation-delay: .14s; }
+    .schedule tbody tr:nth-child(6) { animation-delay: .175s; }
+    .schedule tbody tr:nth-child(7) { animation-delay: .21s; }
+    @keyframes schedule-row-in {
+      from { opacity: 0; translate: 0 7px; }
+      to { opacity: 1; translate: 0 0; }
+    }
+    .subject { display: flex; align-items: center; gap: 11px; font-weight: 700; }
+    .subject-icon { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 9px; background: #f0f4e5; color: var(--green); font-size: 12px; }
+    .subject-icon { transition: transform .25s ease, background-color .25s ease; }
+    .schedule tbody tr:hover .subject-icon { transform: rotate(-8deg) scale(1.12); background: #e5efce; }
+    .teacher, .room { color: var(--muted); }
+    .room { font-size: 10px; }
+    .break-row td { padding-block: 10px; background: #fafaf6; color: #a3a89f !important; font-size: 10px; }
+    .empty-state { display: none; padding: 30px; color: var(--muted); font-size: 13px; text-align: center; }
+    .piket-section { padding-bottom: 68px; }
+    .piket-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .piket-card { padding: 18px 16px; border: 1px solid var(--line); border-radius: 13px; background: var(--white); }
+    .piket-card { transition: transform .25s ease, box-shadow .25s ease; }
+    .piket-card { position: relative; overflow: hidden; }
+    .piket-card::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--sky), var(--lime), var(--orange)); }
+    .piket-card:hover { transform: translateY(-5px) rotate(-.5deg); box-shadow: 0 14px 28px rgba(32, 42, 36, .11); }
+    .piket-card h3 { margin: 0 0 13px; color: var(--green); font-family: "Manrope", sans-serif; font-size: 13px; }
+    .piket-card ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+    .piket-card li { display: flex; align-items: center; gap: 8px; color: #5f6c62; font-size: 11px; }
+    .piket-card li::before { content: ""; width: 5px; height: 5px; flex: 0 0 5px; border-radius: 50%; background: var(--sky); }
+
+    .tugas-section { padding-bottom: 68px; }
+    .tugas-layout { display: grid; grid-template-columns: minmax(0, 370px) minmax(0, 1fr); gap: 20px; align-items: start; }
+    .task-form, .task-card { border: 1px solid var(--line); border-radius: 16px; background: var(--white); }
+    .task-form { display: grid; gap: 14px; padding: 20px; }
+    .field { display: grid; gap: 7px; }
+    .field label { color: #4e5d54; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .field input, .field select {
+      width: 100%; min-height: 42px; border: 1px solid var(--line); border-radius: 10px; padding: 0 12px; background: #fafaf6; color: var(--ink); font: inherit;
+    }
+    .field input:focus, .field select:focus { outline: 3px solid rgba(88,184,232,.2); border-color: var(--sky); }
+    .field input[type="file"] { min-height: auto; padding: 10px; }
+    .field-hint, .task-status { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .task-status { min-height: 17px; }
+    .task-submit { border: 0; border-radius: 10px; min-height: 44px; background: var(--green); color: var(--white); font-weight: 700; cursor: pointer; }
+    .task-submit:hover { background: var(--green-deep); }
+    .task-refresh { border: 1px solid var(--line); border-radius: 9px; padding: 9px 12px; background: var(--white); color: var(--green); font-size: 11px; font-weight: 700; cursor: pointer; }
+    .task-refresh:hover { background: #edf7f1; }
+    .task-list { display: grid; gap: 12px; }
+    .task-card { display: flex; align-items: start; justify-content: space-between; gap: 14px; padding: 16px 18px; }
+    .task-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+    .task-pill { display: inline-flex; align-items: center; min-height: 22px; padding: 0 8px; border-radius: 999px; background: #edf7f1; color: var(--green-deep); font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .task-pill.pr { background: #fff3e9; color: #a95e2f; }
+    .task-card h3 { margin: 0 0 8px; font-family: "Manrope", sans-serif; font-size: 17px; letter-spacing: -.03em; }
+    .task-card p { margin: 0; color: var(--muted); font-size: 12px; }
+    .task-attachment { display: inline-flex; margin-top: 12px; color: var(--green); font-size: 11px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+    .task-preview { display: block; width: min(100%, 260px); max-height: 180px; margin-top: 12px; border: 1px solid var(--line); border-radius: 10px; object-fit: contain; object-position: left; background: #fafaf6; }
+    .task-remove { border: 0; border-radius: 8px; background: #f7f1ed; color: #7b4031; padding: 8px 10px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .task-remove:hover { background: #f3e1dc; }
+    .task-empty { padding: 18px; border: 1px dashed var(--line); border-radius: 12px; background: rgba(255,255,255,.6); color: var(--muted); font-size: 12px; }
+
+    .location-section { padding-bottom: 76px; }
+    .map-card { overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--white); }
+    .map-card { transition: box-shadow .25s ease; }
+    .map-card:hover { box-shadow: 0 14px 30px rgba(32, 42, 36, .08); }
+    .map-frame { display: block; width: 100%; height: 350px; border: 0; background: #eef1e8; }
+    .map-caption { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 20px; }
+    .map-caption strong { display: block; font-family: "Manrope", sans-serif; font-size: 13px; }
+    .map-caption span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .map-link { flex: 0 0 auto; color: var(--green); font-size: 11px; font-weight: 700; }
+    .map-link:hover { text-decoration: underline; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+    body.motion-ready .reveal-on-scroll:not(.is-visible) {
+      opacity: 0;
+      translate: 0 18px;
+    }
+    .reveal-on-scroll {
+      transition: opacity .55s ease, translate .55s ease;
+    }
+    .piket-card.reveal-on-scroll { transition-delay: var(--reveal-delay, 0ms); }
+
+    .footer { padding: 22px 0 28px; border-top: 1px solid var(--line); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 15px; color: var(--muted); font-size: 10px; }
+    .footer-inner strong { color: #000; }
+    .footer-note { display: flex; align-items: center; gap: 6px; }
+    .heart { color: var(--orange); }
+
+    @media (max-width: 760px) {
+      .wrap { width: min(100% - 32px, 560px); }
+      .topbar { min-height: 66px; }
+      .nav { position: relative; }
+      .menu-toggle { display: block; }
+      .nav-date { display: none; }
+      .nav-links { display: none; position: absolute; z-index: 5; top: 56px; left: -1px; right: -1px; flex-direction: column; align-items: stretch; gap: 0; padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); box-shadow: 0 12px 28px rgba(32,42,36,.1); }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px; border-radius: 8px; }
+      .nav-links a:hover { background: #ecefe4; }
+      .hero { padding: 24px 0 29px; }
+      .hero-card { min-height: auto; grid-template-columns: 1fr; }
+      .hero-copy { padding: 38px 27px 0; }
+      h1 { max-width: 430px; margin-top: 17px; font-size: clamp(42px, 11vw, 59px); }
+      .hero-copy > p { max-width: 390px; font-size: 12px; }
+      .hero-actions { gap: 16px; margin-top: 22px; }
+      .hero-art { min-height: 245px; }
+      .sun { width: 160px; height: 160px; top: 33px; right: calc(50% - 102px); }
+      .orbit { width: 220px; height: 220px; top: 5px; right: calc(50% - 132px); }
+      .art-number { font-size: 72px; }
+      .study-book { width: 75px; height: 60px; left: 8px; bottom: 24px; }
+      .study-pencil { width: 31px; height: 64px; top: 13px; right: 14px; }
+      .study-star { width: 20px; height: 20px; top: 31px; left: 22px; }
+      .art-note { right: 15px; bottom: 14px; width: 164px; padding: 12px; }
+      .art-note strong { font-size: 12px; }
+      .stats { margin-bottom: 45px; padding: 18px 0; grid-template-columns: repeat(2, 1fr); row-gap: 19px; }
+      .stat { padding-left: 15px; }
+      .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+      .stat strong { font-size: 21px; }
+      .advisor-card { margin: -20px auto 43px; padding: 14px; }
+      .advisor-name { font-size: 12px; }
+      .tugas-layout { grid-template-columns: 1fr; }
+      .task-card { flex-direction: column; }
+      .section-heading { align-items: start; flex-direction: column; }
+      h2 { font-size: 25px; }
+      .day-picker { max-width: 100%; }
+      .day-picker button { min-width: 40px; padding-inline: 8px; }
+      .schedule-section { padding-bottom: 48px; }
+      .piket-section { padding-bottom: 48px; }
+      .piket-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .location-section { padding-bottom: 49px; }
+      .map-frame { height: 270px; }
+      .map-caption { align-items: flex-start; flex-direction: column; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav wrap" aria-label="Navigasi utama">
+      <a class="brand" href="#beranda" aria-label="Kelas X-11, beranda">
+        <span class="brand-mark">k.</span>
+        <span class="brand-name">AREA KELAS X-11.</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#beranda">Beranda</a>
+        <a href="#jadwal">Jadwal</a>
+        <a href="#piket">Jadwal piket</a>
+        <a href="#tugas">Tugas / PR</a>
+        <a href="#lokasi">Lokasi</a>
+      </div>
+      <span class="nav-date">SMA · Tahun ajaran 2026/2027</span>
+      <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="nav-links">☰</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap" id="beranda">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <span class="eyebrow">Satu kelas, banyak cerita</span>
+          <h1>Belajar bareng,<br><span>tumbuh bareng.</span></h1>
+          <p>Selamat datang di ruang digital Kelas X-11. Tempat kita berbagi kabar, mencari jadwal, dan menyimpan cerita seru selama di SMA.</p>
+          <div class="hero-actions">
+            <a class="button" href="#jadwal">Lihat jadwal <span aria-hidden="true">↗</span></a>
+            <a class="text-link" href="#piket">Lihat jadwal piket <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit"></div>
+          <div class="sun"><div class="art-number">X-11</div></div>
+          <div class="study-doodle study-book">
+            <svg viewBox="0 0 120 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 20c18-7 34-4 52 7v54C42 69 24 67 8 74V20Z" fill="#fffdf4" stroke="#234632" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M112 20c-18-7-34-4-52 7v54c18-12 36-14 52-7V20Z" fill="#f4f8dc" stroke="#234632" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M18 33c11-3 22-2 32 3M18 43c11-3 22-2 32 3M102 33c-11-3-22-2-32 3M102 43c-11-3-22-2-32 3" stroke="#83a47d" stroke-width="3" stroke-linecap="round"/>
+              <path d="M60 27v54" stroke="#234632" stroke-width="3"/>
+            </svg>
+          </div>
+          <div class="study-doodle study-pencil">
+            <svg viewBox="0 0 44 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="m22 4 15 15v55L22 94 7 74V19L22 4Z" fill="#f4a678" stroke="#234632" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M7 20h30M7 72h30" stroke="#234632" stroke-width="3"/>
+              <path d="m15 83 7 11 7-11" fill="#f6e1b9" stroke="#234632" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M22 4v69" stroke="#fff2d8" stroke-width="3"/>
+            </svg>
+          </div>
+          <div class="study-doodle study-star">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="m16 2 3.7 9.3L30 16l-10.3 4.7L16 30l-3.7-9.3L2 16l10.3-4.7L16 2Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="art-note"><small>kelas kita</small><strong>Tempat ide baik bertemu teman hebat.</strong></div>
+        </div>
+        <div class="hero-decoration" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="stats wrap" aria-label="Tentang kelas">
+      <div class="stat"><strong>X-11</strong><span>Kelas kebanggaan kita</span></div>
+      <div class="stat"><strong>35</strong><span>Siswa penuh cerita</span></div>
+      <div class="stat"><strong>5 hari</strong><span>Belajar setiap pekan</span></div>
+      <div class="stat"><strong>2026—27</strong><span>Tahun ajaran</span></div>
+    </section>
+
+    <section class="advisor-card wrap" aria-label="Wali kelas">
+      <span class="advisor-icon" aria-hidden="true">✎</span>
+      <div>
+        <span class="advisor-label">Wali kelas</span>
+        <strong class="advisor-name">Ibu Khusnul Khotimah, S.Pd</strong>
+      </div>
+    </section>
+
+    <section class="schedule-section wrap" id="jadwal">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Biar nggak salah kelas</p>
+          <h2>Jadwal pelajaran X-11</h2>
+          <p class="section-subtitle">Pilih hari untuk melihat jadwal. Angka menunjukkan durasi dalam Jam Pelajaran (JP).</p>
+        </div>
+        <div class="day-picker" role="group" aria-label="Pilih hari jadwal">
+          <button type="button" data-day="Senin" aria-pressed="true">Sen</button>
+          <button type="button" data-day="Selasa" aria-pressed="false">Sel</button>
+          <button type="button" data-day="Rabu" aria-pressed="false">Rab</button>
+          <button type="button" data-day="Kamis" aria-pressed="false">Kam</button>
+          <button type="button" data-day="Jumat" aria-pressed="false">Jum</button>
+        </div>
+      </div>
+      <div class="table-shell">
+        <table class="schedule">
+          <thead><tr><th>Durasi (JP)</th><th>Mata pelajaran</th></tr></thead>
+          <tbody id="schedule-body"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state">Jadwal hari ini belum ditambahkan.</div>
+      </div>
+    </section>
+
+    <section class="piket-section wrap" id="piket">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Bagi tugas, jaga kelas</p>
+          <h2>Jadwal piket X-11</h2>
+          <p class="section-subtitle">Petugas piket untuk setiap hari sekolah.</p>
+        </div>
+      </div>
+      <div class="piket-grid">
+        <article class="piket-card">
+          <h3>Senin</h3>
+          <ul><li>Ilyas</li><li>Shaki</li><li>Dhevyn</li><li>Bismo</li><li>Fuhaid</li><li>Zulfah</li><li>Jesi</li></ul>
+        </article>
+        <article class="piket-card">
+          <h3>Selasa</h3>
+          <ul><li>Mutiara</li><li>Gisel</li><li>Shallom</li><li>Vano</li><li>Rico</li><li>Zika</li></ul>
+        </article>
+        <article class="piket-card">
+          <h3>Rabu</h3>
+          <ul><li>Dea</li><li>Haura</li><li>Bening</li><li>Ayu</li><li>Baihaqi</li><li>Bintang</li><li>Vino</li></ul>
+        </article>
+        <article class="piket-card">
+          <h3>Kamis</h3>
+          <ul><li>Trisa</li><li>Fira</li><li>Affan</li><li>Faro</li><li>Zhaqy</li><li>Manda</li><li>Metha</li></ul>
+        </article>
+        <article class="piket-card">
+          <h3>Jumat</h3>
+          <ul><li>Ajeng</li><li>Firman</li><li>Difen</li><li>Nayla</li><li>Keysha</li><li>Selda</li><li>Nava</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="tugas-section wrap" id="tugas">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Simpan jadwal tugas</p>
+          <h2>Daftar tugas &amp; PR</h2>
+          <p class="section-subtitle">Tugas, PR, file, dan foto yang dikirim akan dibagikan ke semua pengunjung.</p>
+        </div>
+        <button class="task-refresh" id="task-refresh" type="button">Muat ulang daftar</button>
+      </div>
+      <div class="tugas-layout">
+        <form class="task-form" id="task-form">
+          <div class="field">
+            <label for="task-title">Judul tugas</label>
+            <input id="task-title" name="task-title" type="text" maxlength="80" placeholder="Contoh: Tugas Biologi halaman 30" required>
+          </div>
+          <div class="field">
+            <label for="task-type">Jenis</label>
+            <select id="task-type" name="task-type">
+              <option value="Tugas">Tugas</option>
+              <option value="PR">PR</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="task-due">Deadline</label>
+            <input id="task-due" name="task-due" type="date">
+          </div>
+          <div class="field">
+            <label for="task-file">Lampiran file atau foto (opsional)</label>
+            <input id="task-file" name="task-file" type="file" accept="image/jpeg,image/png,image/gif,image/webp,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt">
+            <p class="field-hint">Maksimal 4 MB. Kiriman terlihat publik dan tidak dapat dihapus dari halaman.</p>
+          </div>
+          <button class="task-submit" type="submit" disabled>Memuat tugas...</button>
+          <p class="task-status" id="task-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="task-list" id="task-list" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="location-section wrap" id="lokasi">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Temukan lokasi sekolah</p>
+          <h2>SMA Negeri 2 Mojokerto</h2>
+          <p class="section-subtitle">Peta lokasi sekolah melalui Google Maps.</p>
+        </div>
+      </div>
+      <div class="map-card">
+        <iframe
+          class="map-frame"
+          title="Peta Google Maps SMA Negeri 2 Mojokerto"
+          src="https://maps.google.com/maps?q=SMA%20Negeri%202%20Mojokerto&t=&z=15&ie=UTF8&iwloc=&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen>
+        </iframe>
+        <div class="map-caption">
+          <div>
+            <strong>SMA Negeri 2 Mojokerto</strong>
+            <span>Gunakan Google Maps untuk melihat lokasi dan petunjuk arah.</span>
+          </div>
+          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=SMA+Negeri+2+Mojokerto" target="_blank" rel="noopener noreferrer">Buka petunjuk arah ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner wrap">
+      <span><strong>AREA KELAS X-11.</strong> · Website sederhana untuk Kelas X-11</span>
+      <span class="footer-note">Developer: <strong>ALFARO RABBANI</strong></span>
+      <span class="footer-note">Dibuat dengan <span class="heart">♥</span> dan semangat belajar</span>
+    </div>
+  </footer>
+
+  <script>
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!prefersReducedMotion && "IntersectionObserver" in window) {
+      const revealItems = document.querySelectorAll(".stats, .schedule-section, .piket-section, .piket-card, .map-card");
+      let piketCardIndex = 0;
+      revealItems.forEach((item) => {
+        item.classList.add("reveal-on-scroll");
+        if (item.classList.contains("piket-card")) {
+          item.style.setProperty("--reveal-delay", `${piketCardIndex * 70}ms`);
+          piketCardIndex += 1;
+        }
+      });
+      document.body.classList.add("motion-ready");
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealItems.forEach((item) => revealObserver.observe(item));
+    }
+
+    const schedules = {
+      Senin: [
+        { duration: 3, subject: "Fisika", icon: "ϕ" },
+        { duration: 2, subject: "B. Indo", icon: "Aa" },
+        { duration: 2, subject: "B. Jawa", icon: "文" },
+        { duration: 3, subject: "Sejarah", icon: "◷" }
+      ],
+      Selasa: [
+        { duration: 2, subject: "PPKN", icon: "✳" },
+        { duration: 3, subject: "Kimia", icon: "⚗" },
+        { duration: 2, subject: "Informatika/KKA", icon: "⌘" },
+        { duration: 3, subject: "PAI", icon: "✦" }
+      ],
+      Rabu: [
+        { duration: 3, subject: "B. Indo", icon: "Aa" },
+        { duration: 2, subject: "Matematika", icon: "∑" },
+        { duration: 3, subject: "Ekonomi", icon: "↗" },
+        { duration: 3, subject: "PJOK", icon: "⚽" }
+      ],
+      Kamis: [
+        { duration: 2, subject: "Seni budaya", icon: "✳" },
+        { duration: 2, subject: "Informatika", icon: "⌘" },
+        { duration: 3, subject: "Sosiologi", icon: "◎" },
+        { duration: 3, subject: "B. Ingg", icon: "Ab" }
+      ],
+      Jumat: [
+        { duration: 2, subject: "Matematika", icon: "∑" },
+        { duration: 3, subject: "Geografi", icon: "◎" },
+        { duration: 3, subject: "Biologi", icon: "⌘" }
+      ]
+    };
+
+    const scheduleBody = document.querySelector("#schedule-body");
+    const emptyState = document.querySelector("#empty-state");
+    const dayButtons = document.querySelectorAll(".day-picker button");
+    const taskForm = document.querySelector("#task-form");
+    const taskList = document.querySelector("#task-list");
+
+    const taskSubmit = taskForm.querySelector(".task-submit");
+    const taskStatus = document.querySelector("#task-status");
+    const taskFileInput = document.querySelector("#task-file");
+    const taskRefresh = document.querySelector("#task-refresh");
+    const maxAttachmentSize = 4 * 1024 * 1024;
+
+    function formatTaskDate(dateValue) {
+      if (!dateValue) return "Tanpa deadline";
+      const date = new Date(`${dateValue}T00:00:00`);
+      if (Number.isNaN(date.getTime())) return "Tanpa deadline";
+      return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short", year: "numeric" }).format(date);
+    }
+
+    async function renderTasks() {
+      const response = await fetch("/api/tasks", { headers: { accept: "application/json" } });
+      if (!response.ok) throw new Error(`Daftar tugas gagal dimuat (${response.status}).`);
+      const tasks = await response.json();
+      taskList.replaceChildren();
+
+      if (!tasks.length) {
+        const emptyItem = document.createElement("div");
+        emptyItem.className = "task-empty";
+        emptyItem.textContent = "Belum ada tugas atau PR yang ditambahkan.";
+        taskList.appendChild(emptyItem);
+        return;
+      }
+
+      tasks.forEach((task) => {
+        const card = document.createElement("article");
+        card.className = "task-card";
+        const content = document.createElement("div");
+        const meta = document.createElement("div");
+        meta.className = "task-meta";
+        const pill = document.createElement("span");
+        pill.className = `task-pill${task.type === "PR" ? " pr" : ""}`;
+        pill.textContent = task.type;
+        const due = document.createElement("p");
+        due.textContent = formatTaskDate(task.due);
+        meta.append(pill, due);
+        const heading = document.createElement("h3");
+        heading.textContent = task.title;
+        content.append(meta, heading);
+
+        if (task.attachmentUrl) {
+          const attachmentLink = document.createElement("a");
+          attachmentLink.className = "task-attachment";
+          attachmentLink.href = task.attachmentUrl;
+          attachmentLink.target = "_blank";
+          attachmentLink.rel = "noopener noreferrer";
+          attachmentLink.textContent = `Buka lampiran: ${task.attachmentName}`;
+          content.appendChild(attachmentLink);
+
+          if (task.attachmentType.startsWith("image/")) {
+            const preview = document.createElement("img");
+            preview.className = "task-preview";
+            preview.src = task.attachmentUrl;
+            preview.alt = `Pratinjau ${task.attachmentName}`;
+            content.appendChild(preview);
+          }
+        }
+
+        card.appendChild(content);
+        taskList.appendChild(card);
+      });
+    }
+
+    async function refreshTasks() {
+      taskRefresh.disabled = true;
+      try {
+        await renderTasks();
+        taskStatus.textContent = "Daftar tugas publik sudah diperbarui.";
+      } catch (error) {
+        taskStatus.textContent = `Gagal memuat tugas publik: ${error.message}`;
+      } finally {
+        taskRefresh.disabled = false;
+      }
+    }
+
+    taskRefresh.addEventListener("click", refreshTasks);
+
+    taskForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const title = document.querySelector("#task-title").value.trim();
+      const type = document.querySelector("#task-type").value;
+      const due = document.querySelector("#task-due").value;
+      const file = taskFileInput.files[0];
+
+      if (!title) {
+        document.querySelector("#task-title").focus();
+        return;
+      }
+
+      if (file && file.size > maxAttachmentSize) {
+        taskStatus.textContent = "Ukuran lampiran melebihi batas 10 MB.";
+        taskFileInput.focus();
+        return;
+      }
+
+      taskSubmit.disabled = true;
+      taskStatus.textContent = "Menyimpan tugas...";
+      try {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("type", type);
+        formData.append("due", due);
+        if (file) formData.append("attachment", file);
+        const response = await fetch("/api/tasks", { method: "POST", body: formData });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || `Pengiriman gagal (${response.status}).`);
+        taskForm.reset();
+        await renderTasks();
+        taskStatus.textContent = "Tugas berhasil diunggah dan dapat dilihat semua pengunjung.";
+        document.querySelector("#task-title").focus();
+      } catch (error) {
+        taskStatus.textContent = `Gagal mengunggah tugas: ${error.message}`;
+      } finally {
+        taskSubmit.disabled = false;
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const control = target.closest("a, button");
+      if (!control) return;
+
+      control.animate(
+        [{ scale: 1 }, { scale: 0.94, offset: 0.4 }, { scale: 1 }],
+        { duration: 220, easing: "ease-out" }
+      );
+    });
+
+    function showSchedule(day) {
+      const lessons = schedules[day] || [];
+      scheduleBody.replaceChildren();
+      emptyState.style.display = lessons.length ? "none" : "block";
+
+      lessons.forEach((lesson) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${lesson.duration} JP</td><td><span class="subject"><span class="subject-icon">${lesson.icon}</span>${lesson.subject}</span></td>`;
+        scheduleBody.append(row);
+      });
+    }
+
+    dayButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        dayButtons.forEach((dayButton) => dayButton.setAttribute("aria-pressed", String(dayButton === button)));
+        showSchedule(button.dataset.day);
+      });
+    });
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector("#nav-links");
+    menuToggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Tutup menu" : "Buka menu");
+      menuToggle.textContent = isOpen ? "×" : "☰";
+    });
+    navLinks.addEventListener("click", (event) => {
+      if (event.target.closest("a")) {
+        navLinks.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Buka menu");
+        menuToggle.textContent = "☰";
+      }
+    });
+
+    taskSubmit.disabled = true;
+    renderTasks()
+      .then(() => {
+        taskSubmit.disabled = false;
+        taskSubmit.textContent = "Tambah tugas / PR";
+      })
+      .catch((error) => {
+        taskStatus.textContent = `Tugas publik tidak dapat dimuat: ${error.message}`;
+        taskSubmit.textContent = "Coba muat ulang halaman";
+      });
+    window.setInterval(() => {
+      renderTasks().catch((error) => {
+        taskStatus.textContent = `Daftar tugas belum bisa diperbarui: ${error.message}`;
+      });
+    }, 30000);
+    showSchedule("Senin");
+  </script>
+</body>
+</html>
