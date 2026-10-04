@@ -106,7 +106,14 @@ async function deleteTask(request, id) {
   if (!task) return jsonResponse({ error: "Tugas tidak ditemukan." }, 404);
 
   await store.delete(`task:${id}`);
-  if (task.attachmentName) await store.delete(`attachment:${id}`);
+  if (task.attachmentName) {
+    try {
+      await store.delete(`attachment:${id}`);
+    } catch (error) {
+      await store.setJSON(`task:${id}`, task);
+      throw error;
+    }
+  }
   return jsonResponse({ ok: true });
 }
 
