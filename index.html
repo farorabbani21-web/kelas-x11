@@ -199,6 +199,8 @@
     .task-card p { margin: 0; color: var(--muted); font-size: 12px; }
     .task-attachment { display: inline-flex; margin-top: 12px; color: var(--green); font-size: 11px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
     .task-preview { display: block; width: min(100%, 260px); max-height: 180px; margin-top: 12px; border: 1px solid var(--line); border-radius: 10px; object-fit: contain; object-position: left; background: #fafaf6; }
+    .task-admin-delete { flex: 0 0 auto; border: 1px solid #f0d9d3; border-radius: 8px; background: #fff8f6; color: #7b4031; padding: 8px 10px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .task-admin-delete:hover { background: #f3e1dc; }
     .task-remove { border: 0; border-radius: 8px; background: #f7f1ed; color: #7b4031; padding: 8px 10px; font-size: 11px; font-weight: 700; cursor: pointer; }
     .task-remove:hover { background: #f3e1dc; }
     .task-empty { padding: 18px; border: 1px dashed var(--line); border-radius: 12px; background: rgba(255,255,255,.6); color: var(--muted); font-size: 12px; }
@@ -417,7 +419,7 @@
         <div>
           <p class="section-kicker">Simpan jadwal tugas</p>
           <h2>Daftar tugas &amp; PR</h2>
-          <p class="section-subtitle">Tugas, PR, file, dan foto yang dikirim akan dibagikan ke semua pengunjung.</p>
+          <p class="section-subtitle">Tugas, PR, file, dan foto terlihat publik. Penghapusan memerlukan kode admin.</p>
         </div>
         <button class="task-refresh" id="task-refresh" type="button">Muat ulang daftar</button>
       </div>
@@ -441,7 +443,7 @@
           <div class="field">
             <label for="task-file">Lampiran file atau foto (opsional)</label>
             <input id="task-file" name="task-file" type="file" accept="image/jpeg,image/png,image/gif,image/webp,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt">
-            <p class="field-hint">Maksimal 4 MB. Kiriman terlihat publik dan tidak dapat dihapus dari halaman.</p>
+            <p class="field-hint">Maksimal 4 MB. Kiriman terlihat publik; hanya admin dengan kode yang dapat menghapusnya.</p>
           </div>
           <button class="task-submit" type="submit" disabled>Memuat tugas...</button>
           <p class="task-status" id="task-status" role="status" aria-live="polite"></p>
@@ -612,7 +614,13 @@
           }
         }
 
-        card.appendChild(content);
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "task-admin-delete";
+        deleteButton.type = "button";
+        deleteButton.dataset.taskId = task.id;
+        deleteButton.textContent = "Hapus (admin)";
+        deleteButton.setAttribute("aria-label", `Hapus tugas lama ${task.title}`);
+        card.append(content, deleteButton);
         taskList.appendChild(card);
       });
     }
@@ -630,6 +638,33 @@
     }
 
     taskRefresh.addEventListener("click", refreshTasks);
+
+    taskList.addEventListener("click", async (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const button = target.closest(".task-admin-delete");
+      if (!button) return;
+
+      const code = window.prompt("Masukkan kode admin untuk menghapus tugas lama.");
+      if (code === null || !code.trim()) return;
+      if (!window.confirm("Yakin ingin menghapus tugas ini beserta lampirannya? Penghapusan tidak dapat dibatalkan.")) return;
+
+      button.disabled = true;
+      taskStatus.textContent = "Menghapus tugas...";
+      try {
+        const response = await fetch(`/api/tasks?id=${encodeURIComponent(button.dataset.taskId)}`, {
+          method: "DELETE",
+          headers: { authorization: `Bearer ${code}` },
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || `Penghapusan gagal (${response.status}).`);
+        await renderTasks();
+        taskStatus.textContent = "Tugas dan lampirannya berhasil dihapus.";
+      } catch (error) {
+        taskStatus.textContent = `Gagal menghapus tugas: ${error.message}`;
+        button.disabled = false;
+      }
+    });
 
     taskForm.addEventListener("submit", async (event) => {
       event.preventDefault();
