@@ -1,4 +1,5 @@
 import { getStore } from "@netlify/blobs";
+import { timingSafeEqual } from "node:crypto";
 
 const store = getStore("kelas-x11-public-tasks");
 const maxFileSize = 4 * 1024 * 1024;
@@ -82,6 +83,33 @@ async function getAttachment(id) {
   });
 }
 
+function hasValidDeleteCode(request) {
+  const expectedCode = process.env.TASK_DELETE_TOKEN;
+  const providedCode = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  if (!expectedCode || !providedCode) return false;
+
+  const expected = Buffer.from(expectedCode);
+  const provided = Buffer.from(providedCode);
+  return expected.length === provided.length && timingSafeEqual(expected, provided);
+}
+
+async function deleteTask(request, id) {
+  if (!process.env.TASK_DELETE_TOKEN) {
+    return jsonResponse({ error: "Kode admin belum dikonfigurasi." }, 503);
+  }
+  if (!hasValidDeleteCode(request)) {
+    return jsonResponse({ error: "Kode admin salah." }, 401);
+  }
+  if (!isValidId(id)) return jsonResponse({ error: "Tugas tidak ditemukan." }, 404);
+
+  const task = await store.get(`task:${id}`, { type: "json" });
+  if (!task) return jsonResponse({ error: "Tugas tidak ditemukan." }, 404);
+
+  await store.delete(`task:${id}`);
+  if (task.attachmentName) await store.delete(`attachment:${id}`);
+  return jsonResponse({ ok: true });
+}
+
 async function createTask(request) {
   const formData = await request.formData();
   const title = formData.get("title");
@@ -95,7 +123,10 @@ async function createTask(request) {
   if (type !== "Tugas" && type !== "PR") {
     return jsonResponse({ error: "Jenis tugas tidak valid." }, 400);
   }
-  if (typeof due !== "string" || (due && !isValidDate(due))) {
+  if (
+    typeof due !== "string" ||
+    (due && !isValidDate(due))
+  ) {
     return jsonResponse({ error: "Tanggal deadline tidak valid." }, 400);
   }
   if (attachment && typeof attachment !== "string" && attachment.size === 0) {
@@ -150,6 +181,7 @@ export default async (request) => {
     }
     if (request.method === "GET") return jsonResponse(await getTasks());
     if (request.method === "POST") return await createTask(request);
+    if (request.method === "DELETE") return await deleteTask(request, url.searchParams.get("id"));
     return jsonResponse({ error: "Metode tidak didukung." }, 405);
   } catch (error) {
     console.error("Kesalahan layanan tugas publik:", error);
